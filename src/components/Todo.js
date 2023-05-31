@@ -2,49 +2,49 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Todo = () => {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
 
   useEffect(() => {
-    fetchTasks();
+    fetchTodos();
   }, []);
 
-  const fetchTasks = async () => {
+  const fetchTodos = async () => {
     try {
       const response = await axios.get('/api/todos');
-      setTasks(response.data);
+      setTodos(response.data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const createTask = async () => {
+  const createTodo = async () => {
     try {
-      const response = await axios.post('/api/todos', { task: newTask });
-      setTasks([...tasks, response.data]);
-      setNewTask('');
+      const response = await axios.post('/api/todos', { todo: newTodo });
+      setTodos([...todos, response.data]);
+      setNewTodo('');
     } catch (error) {
       console.error(error);
     }
   };
 
-  const updateTask = async (id, completed) => {
+  const updateTodo = async (id, completed) => {
     try {
       const response = await axios.put(`/api/todos/${id}`, { completed });
-      const updatedTasks = tasks.map((task) =>
-        task.id === id ? response.data : task
+      const updatedTodos = todos.map((todo) =>
+        todo.id === id ? response.data : todo
       );
-      setTasks(updatedTasks);
+      setTodos(updatedTodos);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const deleteTask = async (id) => {
+  const deleteTodo = async (id) => {
     try {
       await axios.delete(`/api/todos/${id}`);
-      const updatedTasks = tasks.filter((task) => task.id !== id);
-      setTasks(updatedTasks);
+      const updatedTodos = todos.filter((todo) => todo.id !== id);
+      setTodos(updatedTodos);
     } catch (error) {
       console.error(error);
     }
@@ -55,21 +55,21 @@ const Todo = () => {
       <h1>Todo App</h1>
       <input
         type="text"
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Enter task"
+        value={newTodo}
+        onChange={(e) => setNewTodo(e.target.value)}
+        placeholder="Enter todo"
       />
-      <button onClick={createTask}>Add Task</button>
+      <button onClick={createTodo}>Add Todo</button>
       <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
+        {todos.map((todo) => (
+          <li key={todo.id}>
             <input
               type="checkbox"
-              checked={task.completed}
-              onChange={(e) => updateTask(task.id, e.target.checked)}
+              checked={todo.completed}
+              onChange={(e) => updateTodo(todo.id, e.target.checked)}
             />
-            <span>{task.task}</span>
-            <button onClick={() => deleteTask(task.id)}>Delete</button>
+            <span>{todo.todo}</span>
+            <button onClick={() => deleteTodo(todo.id)}>Delete</button>
           </li>
         ))}
       </ul>
