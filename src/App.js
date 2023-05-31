@@ -11,7 +11,7 @@ import {
   theme,
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
-import Todo from './Todo';
+import Todo from './components/Todo';
 
 function App() {
   return (
